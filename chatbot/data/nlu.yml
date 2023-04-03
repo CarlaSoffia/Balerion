@@ -1,91 +1,186 @@
-version: "3.1"
-
+version: '3.1'
 nlu:
 - intent: greet
-  examples: |
-    - hey
+  examples: '- hey
+
     - hello
+
     - hi
+
     - hello there
+
     - good morning
+
     - good evening
+
     - moin
+
     - hey there
-    - let's go
+
+    - let''s go
+
     - hey dude
-    - goodmorning
-    - goodevening
+
+    - good morning
+
+    - good evening
+
     - good afternoon
 
+    '
 - intent: goodbye
-  examples: |
-    - cu
-    - good by
+  examples: '- good bye
+
     - cee you later
+
     - good night
+
     - bye
+
     - goodbye
+
     - have a nice day
+
     - see you around
+
     - bye bye
+
     - see you later
 
+    '
 - intent: affirm
-  examples: |
-    - yes
+  examples: '- yes
+
     - y
+
     - indeed
+
     - of course
+
     - that sounds good
+
     - correct
 
+    '
 - intent: deny
-  examples: |
-    - no
+  examples: '- no
+
     - n
+
     - never
-    - I don't think so
-    - don't like that
+
+    - I don''t think so
+
+    - don''t like that
+
     - no way
+
     - not really
 
+    '
 - intent: mood_great
-  examples: |
-    - perfect
+  examples: '- perfect
+
     - great
+
     - amazing
+
     - feeling like a king
+
     - wonderful
+
     - I am feeling very good
+
     - I am great
+
     - I am amazing
+
     - I am going to save the world
+
     - super stoked
+
     - extremely good
+
     - so so perfect
+
     - so good
+
     - so perfect
 
+    '
 - intent: mood_unhappy
-  examples: |
-    - my day was horrible
+  examples: '- my day was horrible
+
     - I am sad
-    - I don't feel very well
+
+    - I don''t feel very well
+
     - I am disappointed
+
     - super sad
-    - I'm so sad
+
+    - I''m so sad
+
     - sad
+
     - very sad
+
     - unhappy
+
     - not good
+
     - not very good
+
     - extremly sad
+
     - so saad
+
     - so sad
 
+    '
 - intent: bot_challenge
-  examples: |
-    - are you a bot?
+  examples: '- are you a bot?
+
     - are you a human?
+
     - am I talking to a bot?
+
     - am I talking to a human?
+
+    '
+- intent: ask_character
+  examples: '- Who was [Daemon Targaryen](character)?
+  
+  - Who was [Lucerys Velaryon](character)? 
+
+  - Who is [Rhaenyra Targaryen](character)?
+
+  - Who is [Catherine Tully](character)?
+
+  - Show me information about the character [Alicent Hightower](character).
+
+  - Show me information about the character [Brienne Tarth](character).
+
+  - I wanna learn about the character [Jon Snow](character).
+
+  - I wanna learn about the character [Theon Greyjoy](character).
+
+  - I wanna know details about the character [Tyrion Lannister](character).
+  
+  - I wanna know details about the character [Bran Stark](character).
+  
+  '
+- intent: ask_house
+  examples: '- Show me information about House [Hightower](house).
+
+  - Show me information about House [Strong](house).
+
+  - I wanna learn about House [Targaryen](house).
+
+  - I wanna learn about House [Martel](house).
+
+  - I wanna know details about House [Stark](house).
+
+  - I wanna know details about House [Lannister](house).
+  
+  '  

@@ -1,30 +1,16 @@
-version: "3.1"
-
+version: '3.1'
 stories:
-
-- story: happy path
+- story: Show_features_after_greet
   steps:
   - intent: greet
   - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
-
-- story: sad path 1
+  - action: utter_details
+  - action: utter_show_features
+- story: Extract_character
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-
-- story: sad path 2
+  - intent: ask_character
+  - action: action_extract_character
+- story: Extract_house
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
+  - intent: ask_house
+  - action: action_extract_house

@@ -1,34 +1,68 @@
-version: "3.1"
-
+version: '3.1'
 intents:
-  - greet
-  - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
-
+- greet
+- goodbye
+- affirm
+- deny
+- mood_great
+- mood_unhappy
+- bot_challenge
+- ask_character
+- ask_house
+entities:
+- character:
+    type: text
+    synonyms:
+      - Jon Snow
+      - Daenerys Targaryen
+      - Alicent Hightower
+      - Brienne Tarth
+      - Theon Greyjoy
+      - Tyrion Lannister
+- house:
+    type: text
+    synonyms:
+      - Hightower
+      - Strong
+      - Targaryen
+      - Martel
+      - Stark
+      - Lannister
+slots:
+  character:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: character
+  house:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: house
+      
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
-
+  - text: Hey!
+  - text: Hello!
   utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
+  - text: 'Here is something to cheer you up:'
+    image: https://i.imgur.com/nGF1K8f.jpg
   utter_did_that_help:
-  - text: "Did that help you?"
-
+  - text: Did that help you?
   utter_happy:
-  - text: "Great, carry on!"
-
+  - text: Great, carry on!
   utter_goodbye:
-  - text: "Bye"
-
+  - text: Bye
   utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
-
+  - text: I am a bot, powered by Rasa.
+  utter_details:
+  - text: I am Balerion, and I can show you information about Characters and Houses from the universe of Game of Thrones and House of the Dragon.
+  utter_show_features:
+  - text: 'Just write "Who was Daemon Targaryen?" or "I wanna learn about House Stark"'
+  - text: 'Just write: "I wanna learn about the character Jon Snow." or "I wanna know details about House Lannister"'
+actions:
+  - action_extract_character  
+  - action_extract_house
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

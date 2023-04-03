@@ -1,13 +1,24 @@
-version: "3.1"
-
+version: '3.1'
 rules:
-
 - rule: Say goodbye anytime the user says goodbye
   steps:
   - intent: goodbye
   - action: utter_goodbye
-
 - rule: Say 'I am a bot' anytime the user challenges
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+- rule: Show_features_after_greet
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: utter_details
+  - action: utter_show_features
+- rule: Extract_character
+  steps:
+  - intent: ask_character
+  - action: action_extract_character
+- rule: Extract_house
+  steps:
+  - intent: ask_house
+  - action: action_extract_house
