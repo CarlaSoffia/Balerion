@@ -3,11 +3,11 @@
     <v-dialog v-model="show" max-width="500" persistent>
       <v-card>
         <v-card-title>
-          <v-img class="mb-3 mt-2" src="./../assets/series.webp"></v-img>
+          <v-img class="mb-3 mt-2 trajan" src="./../assets/series.webp"></v-img>
         </v-card-title>
         <v-card-text>
-          <h2 class="mb-2">Please enter your name:</h2>
-          <v-text-field v-model="name" hide-details @keyup.enter="submitName" />
+          <h2 class="mb-2 trajan">Please enter your name:</h2>
+          <v-text-field class="trajan" v-model="name" hide-details @keyup.enter="submitName" />
         </v-card-text>
         <v-card-actions class="d-flex justify-center">
           <v-btn @click="submitName" fab dark>
@@ -21,7 +21,9 @@
       <v-row>
         <!-- Left section -->
         <v-col class="full-height data" cols="7">
-          <CharacterInfo :character="characterData" />
+          <v-img class="mb-4 image" width="500" src="./../assets/series.webp"></v-img>
+          <CharacterInfo v-if="isFilled && !isHouse" :character="dataShow" />
+          <HouseInfo v-if="isFilled && isHouse" :house="dataShow" />
         </v-col>
         <!-- Right section -->
         <v-col class="full-height chat" cols="5">
@@ -31,13 +33,13 @@
               <v-img width="70" src="./../assets/targaryen.webp" />
             </v-col>
             <v-col cols="auto">
-              <div class="title font-weight-bold">Balerion</div>
+              <h2><strong>Balerion the Black Dread</strong></h2>
             </v-col>
           </v-row>
 
           <!-- Chat messages -->
           <v-row
-            class="d-flex"
+            class="d-flex scrollable-content"
             style="max-height: calc(100vh - 200px); overflow-y: auto"
             ref="messagesContainer"
           >
@@ -49,12 +51,8 @@
                     outlined
                     style="background-color: #444654"
                   >
-                    <div style="color: #d9d9e3" class="caption">
-                      {{ message.author }}
-                    </div>
-                    <div style="color: #d9d9e3" class="message">
-                      {{ message.text }}
-                    </div>
+                    <p style="color: #d9d9e3"> <strong>{{ message.author }}</strong></p>
+                    <p style="color: #d9d9e3"> {{ message.text }}</p>
                   </v-card>
                 </v-col>
               </v-row>
@@ -66,11 +64,10 @@
             <v-row no-gutters>
               <v-text-field
                 v-model="message"
-                label="Type a message"
                 filled
                 hide-details
                 @keyup.enter="sendMessage"
-                class="texts mr-1"
+                class="texts mr-1 text-input-color"
               />
               <v-btn @click="sendMessage" class="mt-2" fab dark small>
                 <v-icon dark> mdi-send </v-icon>
@@ -85,12 +82,14 @@
 
 <script>
 import CharacterInfo from "./CharacterInfo";
+import HouseInfo from "./HouseInfo";
 import axios from "axios";
 
 export default {
   name: "ChatSection",
   components: {
     CharacterInfo,
+    HouseInfo,
   },
   data() {
     return {
@@ -98,29 +97,9 @@ export default {
       name: "",
       messages: [],
       message: "",
-      characterData: {
-        name: "Jon Snow",
-        gender: "Male",
-        culture: "Northmen",
-        born: "In 283 AC",
-        died: "",
-        titles: ["Lord Commander of the Night's Watch"],
-        aliases: [
-          "Lord Snow",
-          "Ned Stark's Bastard",
-          "The Snow of Winterfell",
-          "The Crow-Come-Over",
-          "The 998th Lord Commander of the Night's Watch",
-          "The Bastard of Winterfell",
-          "The Black Bastard of the Wall",
-          "Lord Crow",
-        ],
-        father: "",
-        mother: "",
-        spouse: "",
-        allegiances: ["https://www.anapioficeandfire.com/api/houses/362"],
-        playedBy: ["Kit Harington"],
-      },
+      dataShow: {},
+      isFilled: false,
+      isHouse: false,
     };
   },
   methods: {
@@ -154,11 +133,24 @@ export default {
         })
         .then((response) => {
           response.data.forEach((res) => {
-            this.messages.push({
-              author: "Balerion 🐉",
-              text: res.text,
-              isUser: false,
-            });
+            if (!res.text.includes("{")) {
+              this.messages.push({
+                author: "Balerion 🐉",
+                text: res.text,
+                isUser: false,
+              });
+            }
+            if (res.text.includes("{") && !res.text.includes("Error")) {
+              if (res.text.includes("gender")) {
+                this.isFilled = true;
+                this.isHouse = false;
+              } else {
+                this.isFilled = true;
+                this.isHouse = true;
+              }
+              this.dataShow = JSON.parse(res.text);
+              console.log(this.dataShow);
+            }
           });
         })
         .catch((error) => {
@@ -174,7 +166,12 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
+@import url('@/assets/trajan.css');
+
+.trajan {
+  font-family: 'Trajanus Roman' !important;
+}
 html,
 body {
   overflow: hidden;
@@ -198,5 +195,18 @@ body {
 }
 .texts {
   background-color: #444654;
+}
+.scrollable-content::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+.text-input-color .v-text-field__slot input, label {
+   color: #d9d9e3 !important;
+}
+.image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

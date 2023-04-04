@@ -1,0 +1,15 @@
+/* trajan.css */
+
+@font-face {
+    font-family: 'Trajanus Roman';
+    src: url('./fonts/Trajanus.woff2') format('woff2'),
+         url('./fonts/Trajanus.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  body {
+    font-family: 'Trajanus Roman';
+    font-size: 16px;
+  }
+  

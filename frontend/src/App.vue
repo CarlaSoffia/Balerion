@@ -1,14 +1,13 @@
 <template>
   <v-app>
     <v-main>
-      <ChatSection/>
+      <ChatSection class="custom-font"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import ChatSection from './components/ChatSection';
-
 export default {
   name: 'App',
 
@@ -21,3 +20,10 @@ export default {
   }),
 };
 </script>
+<style scoped>
+@import url('@/assets/trajan.css');
+
+.custom-font {
+  font-family: 'Trajanus Roman' !important;
+}
+</style>
