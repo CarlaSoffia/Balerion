@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 from dotenv import load_dotenv
 from rasa_sdk.events import SlotSet
@@ -15,7 +16,7 @@ def request(url):
     r = requests.request("GET", url, headers=headers, data=payload)
     if r.status_code != 200:
         return "[Error]["+str(r.status_code)+"] - "  + str(r.json())
-    return str(r.json())
+    return json.dumps(r.json())
 
 class ActionExtractCharacter(Action):
     def name(self) -> Text:

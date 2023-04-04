@@ -28,7 +28,7 @@ entities:
       - Martel
       - Stark of Winterfell
       - Velaryon of Driftmark
-      - Lannister
+      - Lannister of Casterly Rock
 slots:
   character:
     type: text
@@ -59,7 +59,7 @@ responses:
   utter_details:
   - text: I am Balerion, and I can show you information about Characters and Houses from the universe of Game of Thrones and House of the Dragon.
   utter_show_features:
-  - text: 'Just write "Who was Daemon Targaryen?" or "I wanna learn about House Stark"'
+  - text: 'Just write "Who was Daemon Targaryen?" or "I wanna learn about House House Stark of Winterfell"'
   - text: 'Just write: "I wanna learn about the character Jon Snow." or "I wanna know details about House Lannister"'
 actions:
   - action_extract_character  
