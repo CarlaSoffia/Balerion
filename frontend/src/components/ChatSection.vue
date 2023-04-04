@@ -27,8 +27,8 @@
         <v-col class="full-height chat" cols="5">
           <!-- Chat header -->
           <v-row align="center" no-gutters>
-            <v-col cols="auto" class="mr-2">
-              <v-img width="40" src="./../assets/targaryen.webp" />
+            <v-col cols="auto" class="mr-4">
+              <v-img width="70" src="./../assets/targaryen.webp" />
             </v-col>
             <v-col cols="auto">
               <div class="title font-weight-bold">Balerion</div>
