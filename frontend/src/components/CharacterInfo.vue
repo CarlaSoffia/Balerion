@@ -26,14 +26,15 @@
           </li>
         </ul>
     </p>
-    <p v-if="character.aliases && character.aliases.length > 0">
+    <p v-if="character.aliases && character.aliases.length != 0">
      <strong>Aliases:</strong>
         <ul>
           <li v-for="(alias, index) in character.aliases" :key="index">
             {{ alias }}
           </li>
         </ul>
-    <p v-if="character.allegiances && character.allegiances.length > 0">
+    </p> 
+    <p v-if="character.allegiances && character.allegiances.length != 0">
      <strong>Allegiances:</strong>
         <ul>
           <li v-for="(allegiance, index) in character.allegiances" :key="index">
@@ -57,14 +58,10 @@ export default {
 </script>
 <style scoped>
 .character-container {
-  padding: 10px;
-  margin-bottom: 10px;
   overflow-y: auto;
-  height: 100%;
+  max-height: 85%;
 }
 .scrollable-content::-webkit-scrollbar {
-  width: 0 !important;
-  height: 0 !important;
   display: none !important;
 }
 </style>

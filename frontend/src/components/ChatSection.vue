@@ -7,7 +7,12 @@
         </v-card-title>
         <v-card-text>
           <h2 class="mb-2 trajan">Please enter your name:</h2>
-          <v-text-field class="trajan" v-model="name" hide-details @keyup.enter="submitName" />
+          <v-text-field
+            class="trajan"
+            v-model="name"
+            hide-details
+            @keyup.enter="submitName"
+          />
         </v-card-text>
         <v-card-actions class="d-flex justify-center">
           <v-btn @click="submitName" fab dark>
@@ -21,7 +26,11 @@
       <v-row>
         <!-- Left section -->
         <v-col class="full-height data" cols="7">
-          <v-img class="mb-4 image" width="500" src="./../assets/series.webp"></v-img>
+          <v-img
+            class="mb-4 image"
+            width="500"
+            src="./../assets/series.webp"
+          ></v-img>
           <CharacterInfo v-if="isFilled && !isHouse" :character="dataShow" />
           <HouseInfo v-if="isFilled && isHouse" :house="dataShow" />
         </v-col>
@@ -51,8 +60,10 @@
                     outlined
                     style="background-color: #444654"
                   >
-                    <p style="color: #d9d9e3"> <strong>{{ message.author }}</strong></p>
-                    <p style="color: #d9d9e3"> {{ message.text }}</p>
+                    <p style="color: #d9d9e3">
+                      <strong>{{ message.author }}</strong>
+                    </p>
+                    <p style="color: #d9d9e3">{{ message.text }}</p>
                   </v-card>
                 </v-col>
               </v-row>
@@ -102,13 +113,18 @@ export default {
       isHouse: false,
     };
   },
+  watch: {
+    messages() {
+      this.scrollToBottom();
+    },
+  },
   methods: {
     submitName() {
       if (this.name != "") {
         this.show = false;
       }
     },
-    sendMessage() {
+    async sendMessage() {
       if (this.message == "" || this.name == "") {
         return;
       }
@@ -118,8 +134,7 @@ export default {
         text: this.message,
         isUser: true,
       });
-      this.scrollToBottom();
-      this.sendRasa(this.message);
+      await this.sendRasa(this.message);
       this.message = "";
     },
     sendRasa(str) {
@@ -149,7 +164,6 @@ export default {
                 this.isHouse = true;
               }
               this.dataShow = JSON.parse(res.text);
-              console.log(this.dataShow);
             }
           });
         })
@@ -159,18 +173,18 @@ export default {
     },
     scrollToBottom() {
       this.$nextTick(() => {
-        this.$refs.messagesContainer.scrollTop =
-          this.$refs.messagesContainer.scrollHeight;
+        const container = this.$refs.messagesContainer;
+        container.scrollTop = container.scrollHeight + container.clientHeight;
       });
     },
   },
 };
 </script>
-<style scoped>
-@import url('@/assets/trajan.css');
+<style>
+@import url("@/assets/trajan.css");
 
 .trajan {
-  font-family: 'Trajanus Roman' !important;
+  font-family: "Trajanus Roman";
 }
 html,
 body {
@@ -201,8 +215,8 @@ body {
   height: 0 !important;
   display: none !important;
 }
-.text-input-color .v-text-field__slot input, label {
-   color: #d9d9e3 !important;
+.text-input-color .v-text-field__slot input {
+  color: #d9d9e3 !important;
 }
 .image {
   display: block;

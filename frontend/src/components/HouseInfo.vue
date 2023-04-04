@@ -59,10 +59,8 @@ export default {
 
 <style scoped>
 .house-container {
-  padding: 10px;
-  margin-bottom: 10px;
   overflow-y: auto;
-  height: 100%;
+  max-height: 85%;
 }
 .scrollable-content::-webkit-scrollbar {
   width: 0 !important;
