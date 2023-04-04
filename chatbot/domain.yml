@@ -24,9 +24,10 @@ entities:
     synonyms:
       - Hightower
       - Strong
-      - Targaryen
+      - Targaryen of King's Landing
       - Martel
-      - Stark
+      - Stark of Winterfell
+      - Velaryon of Driftmark
       - Lannister
 slots:
   character:
