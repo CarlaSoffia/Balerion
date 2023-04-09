@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  chatbot:
+    image: chatbot
+    build: chatbot
+    ports:
+      - "5005:5005"
+      - "5055:5055"
+  frontend:
+    image: frontend
+    build: frontend
+    ports:
+      - "8080:8080" 
+    environment:     
+      RASA: http://chatbot:5005/webhooks/rest/webhook
+  server:
+    image: server
+    build: server
+    environment:
+      SERVER: http://chatbot:3000
+    ports:
+      - "3000:3000"   
+  db:
+    image: mysql
+    restart: always
+    environment:
+      DB_PASSWORD: secret
+      DB_HOST: db
+      DB_USER: root
+      DB_NAME: BalerionMySQL
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database:/var/lib/mysql    
