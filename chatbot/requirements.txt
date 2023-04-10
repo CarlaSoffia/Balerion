@@ -1,4 +1,4 @@
-mysql-connector==2.2.9
+pymysql==1.0.3
 python-dotenv==1.0.0
 rasa==3.4.5
 rasa_sdk==3.4.1
