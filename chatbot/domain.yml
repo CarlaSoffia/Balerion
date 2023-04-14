@@ -9,38 +9,15 @@ intents:
 - bot_challenge
 - ask_character
 - ask_house
-entities:
-- character:
-    type: text
-    synonyms:
-      - Jon Snow
-      - Daenerys Targaryen
-      - Alicent Hightower
-      - Brienne Tarth
-      - Theon Greyjoy
-      - Tyrion Lannister
-- house:
-    type: text
-    synonyms:
-      - Hightower
-      - Strong
-      - Targaryen of King's Landing
-      - Martel
-      - Stark of Winterfell
-      - Velaryon of Driftmark
-      - Lannister of Casterly Rock
 slots:
   character:
     type: text
     mappings:
-    - type: from_entity
-      entity: character
+    - type: from_text
   house:
     type: text
     mappings:
-    - type: from_entity
-      entity: house
-      
+    - type: from_text
 responses:
   utter_greet:
   - text: Hey!
@@ -58,10 +35,12 @@ responses:
   - text: I am a bot, powered by Rasa.
   utter_details:
   - text: I am Balerion, and I can show you information about Characters and Houses from the universe of Game of Thrones and House of the Dragon.
+  - text: I am Balerion the Black Dread. I can provide information about Characters and Houses from the universe of A Song Of Ice and Fire (GoT and HoTD) by GRRM.
   utter_show_features:
-  - text: 'Just write "Who was Daemon Targaryen?" or "I wanna learn about House House Stark of Winterfell"'
-  - text: 'Just write: "I wanna learn about the character Jon Snow." or "I wanna know details about House Lannister"'
+  - text: 'Just write "Who is Rhaenyra Targaryen?" or "Can you tell me about House Hightower of the Hightower?"'
+  - text: 'Just write "Who is Jon Snow?" or "Can you tell me about House Stark of Winterfell?"'
 actions:
+  - action_listen
   - action_extract_character  
   - action_extract_house
 session_config:

@@ -9,7 +9,7 @@
           <h2 class="mb-2 trajan">Please enter your name:</h2>
           <v-text-field
             class="trajan"
-            v-model="name"
+            v-model="username"
             hide-details
             @keyup.enter="submitName"
           />
@@ -120,12 +120,12 @@ export default {
   },
   methods: {
     submitName() {
-      if (this.name != "") {
+      if (this.username != "") {
         this.show = false;
       }
     },
     async sendMessage() {
-      if (this.message == "" || this.name == "") {
+      if (this.message == "" || this.username == "") {
         return;
       }
 
@@ -134,16 +134,16 @@ export default {
         text: this.message,
         isUser: true,
       });
-      await this.sendRasa(this.message);
+      await this.sendRasa();
       this.message = "";
     },
-    sendRasa(str) {
+    sendRasa() {
       var data = {
-        sender: this.name,
-        message: str,
+        sender: this.username,
+        message: this.message,
       };
       axios
-        .post(process.env.RASA, data, {
+        .post(process.env.VUE_APP_RASA, data, {
           headers: { "Content-Type": "application/json" },
         })
         .then((response) => {

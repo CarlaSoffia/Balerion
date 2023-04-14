@@ -149,38 +149,13 @@ nlu:
 
     '
 - intent: ask_character
-  examples: '- Who was [Daemon Targaryen](character)?
+  examples: '- Who is Rhaenyra Targaryen?
   
-  - Who was [Lucerys Velaryon](character)? 
+  - Who is Alicent Hightower?'
 
-  - Who is [Rhaenyra Targaryen](character)?
-
-  - Who is [Catherine Tully](character)?
-
-  - Show me information about the character [Alicent Hightower](character).
-
-  - Show me information about the character [Brienne Tarth](character).
-
-  - I wanna learn about the character [Jon Snow](character).
-
-  - I wanna learn about the character [Theon Greyjoy](character).
-
-  - I wanna know details about the character [Tyrion Lannister](character).
-  
-  - I wanna know details about the character [Bran Stark](character).
-  
-  '
 - intent: ask_house
-  examples: '- Show me information about House [Hightower](house).
+  examples: '- Can you tell me about House Hightower of the Hightower?
 
-  - Show me information about House [Strong](house).
+  - Can you tell me about House Stark of Winterfell?
 
-  - I wanna learn about House [Targaryen of King''s Landing](house).
-
-  - I wanna learn about House [Martel](house).
-
-  - I wanna know details about House [Stark of Winterfell](house).
-
-  - I wanna know details about House [Lannister](house).
-  
   '  

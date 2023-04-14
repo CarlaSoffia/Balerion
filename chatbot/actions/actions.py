@@ -1,10 +1,11 @@
 import os
+import re
 import json
 import pymysql
 import datetime
 import requests
 from dotenv import load_dotenv
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, ActionExecuted
 from rasa_sdk import Action, Tracker
 from typing import Any, Text, Dict, List
 from rasa_sdk.executor import CollectingDispatcher
@@ -14,7 +15,6 @@ SERVER = str(os.getenv('SERVER'))
 def database_add_message(user, text): 
     database_name = str(os.getenv('DB_database'))
     conn = None
-    databaseExists = True
     try:
         conn = pymysql.connect(
             host=str(os.getenv('DB_host')),
@@ -26,7 +26,6 @@ def database_add_message(user, text):
             cursorclass=pymysql.cursors.DictCursor)
     except pymysql.err.OperationalError as e:
         print(f"Database doesn't exist: {database_name}")
-        databaseExists = False
         conn = pymysql.connect(
             host=str(os.getenv('DB_host')),
             port=int(os.getenv('DB_port')),
@@ -50,7 +49,11 @@ def database_add_message(user, text):
             cursorclass=pymysql.cursors.DictCursor)   
 
     with conn.cursor() as cursor:
-        if databaseExists == False:
+        try:
+            cursor.execute("""
+                SELECT id FROM users WHERE username = %s
+            """, (user,))
+        except pymysql.err.ProgrammingError as e:
             cursor.execute("""
                 CREATE TABLE users (
                     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -66,23 +69,22 @@ def database_add_message(user, text):
                     FOREIGN KEY (user_id) REFERENCES users(id)
                 )
             """)
-        else:
+            conn.commit()
             cursor.execute("""
                 SELECT id FROM users WHERE username = %s
             """, (user,))
-            result = cursor.fetchone()
-            if result is not None and len(result) > 0:
-                user_id = result["id"]
-            else:
-                cursor.execute("INSERT INTO users (username) VALUES (%s)", (user,))
-                user_id = cursor.lastrowid
-            now = datetime.datetime.now()
-            now = now.strftime('%Y-%m-%d %H:%M:%S')
-            cursor.execute("INSERT INTO messages (user_id, timestamp, message) VALUES (%s, %s, %s)", (user_id, now, text))   
+        result = cursor.fetchone()
+        if result is not None and len(result) > 0:
+            user_id = result["id"]
+        else:
+            cursor.execute("INSERT INTO users (username) VALUES (%s)", (user,))
+            user_id = cursor.lastrowid
+        now = datetime.datetime.now()
+        now = now.strftime('%Y-%m-%d %H:%M:%S')
+        cursor.execute("INSERT INTO messages (user_id, timestamp, message) VALUES (%s, %s, %s)", (user_id, now, text))   
         conn.commit()
 
-    conn.close()    
-                 
+    conn.close()                 
 def request(url):
     payload={}
     headers = {}
@@ -91,6 +93,15 @@ def request(url):
         return "[Error]["+str(r.status_code)+"] - "  + str(r.json())
     return json.dumps(r.json())
 
+class CustomActionListen(Action):
+    def name(self) -> Text:
+        return "action_listen"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        database_add_message(tracker.sender_id, (tracker.latest_message)['text'])
+        return [ActionExecuted("action_listen")]
 class ActionExtractCharacter(Action):
     def name(self) -> Text:
         return "action_extract_character"
@@ -98,12 +109,19 @@ class ActionExtractCharacter(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:       
-        character = tracker.latest_message['entities'][0]['value']
-        SlotSet("character", character)
+        message = tracker.latest_message['text']
+        pattern = r'(?<=is\s)(.*?)(?=\?)'
+        match = re.search(pattern, message)
+        if match:
+            character = match.group()
+            SlotSet("character", character)
+        else:
+            dispatcher.utter_message("Sorry, I couldn't find a character name in your message.")
+            return []
         characterData = request(SERVER+"/characters?name="+character.replace(" ","%20"))
-        database_add_message(tracker.sender_id, (tracker.latest_message)['text'])
         dispatcher.utter_message(f"Here is what I know about {character}")
         dispatcher.utter_message(characterData)
+
 class ActionExtractHouse(Action):
     def name(self) -> Text:
         return "action_extract_house"
@@ -111,9 +129,15 @@ class ActionExtractHouse(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        house = tracker.latest_message['entities'][0]['value']
-        SlotSet("house", house)
-        houseData = request(SERVER+"/houses?name=House%20"+house.replace(" ","%20"))
-        database_add_message(tracker.sender_id, (tracker.latest_message)['text'])
-        dispatcher.utter_message(f"Here is what I know about House {house}")
+        message = tracker.latest_message['text']
+        pattern = r'(?<=about\s)(.*?)(?=\?)'
+        match = re.search(pattern, message)
+        if match:
+            house = match.group()
+            SlotSet("house", house)
+        else:
+            dispatcher.utter_message("Sorry, I couldn't find a house name in your message.")
+            return []
+        houseData = request(SERVER+"/houses?name="+house.replace(" ","%20"))
+        dispatcher.utter_message(f"Here is what I know about {house}")
         dispatcher.utter_message(houseData)

@@ -28,3 +28,5 @@ frontend/*.sw?
 server/node_modules
 
 database
+
+balerion-383615-6148f8e37ba9.json
