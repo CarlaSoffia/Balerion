@@ -17,4 +17,4 @@ COPY . .
 RUN npm run build
 
 # Start the server
-CMD ["npm", "run", "serve"]
+ENTRYPOINT ["npm", "run", "serve"]
