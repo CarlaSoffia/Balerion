@@ -230,6 +230,10 @@ resource "google_cloud_run_v2_service" "chatbot" {
           value = "secret"
       }
       env {
+          name  = "DB_port"
+          value = "3306"
+      }
+      env {
         name  = "DB_database"
         value = "BalerionMySQL"
       }
