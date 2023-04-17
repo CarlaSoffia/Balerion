@@ -107,42 +107,14 @@ data "google_iam_policy" "public" {
 }
 
 // ----------------------------------------------------------- SERVER ------------------------------------------------------------
-resource "google_container_registry" "server" {
-  location = "EU"
-}
-
-data "docker_image" "server" {
-  name = "server:latest"
-}
-
-# Push the Docker image to the Google Container Registry
-resource "null_resource" "push_docker_image_server" {
-  depends_on = [
-    data.docker_image.server,
-    null_resource.gcloud_auth
-  ]
-
-  provisioner "local-exec" {
-    command = "docker tag server gcr.io/balerion-383615/server:latest && docker push gcr.io/balerion-383615/server:latest"
-  }
-}
-
-# Push the Docker image to the Google Container Registry
-data "google_container_registry_image" "server" {
-  name = "server"
-}
 
 resource "google_cloud_run_v2_service" "server" {
   name     = "server"
   location = "us-central1"
   ingress = "INGRESS_TRAFFIC_ALL"
-  depends_on = [
-    data.google_container_registry_image.server,
-    null_resource.push_docker_image_server
-  ]
   template {
     containers {
-      image = "${data.google_container_registry_repository.balerion.repository_url}/server"
+      image = "gcr.io/balerion-383615/github.com/carlasoffia/balerion_server:latest"
       ports {
         container_port = 3000
       }
@@ -231,44 +203,17 @@ resource "google_cloud_run_v2_service_iam_policy" "policyMySQL" {
 // ------------------------------------------------------ RASA CHATBOT ---------------------------------------------------------------
 
 
-resource "google_container_registry" "chatbot" {
-  location = "EU"
-}
-
-data "docker_image" "chatbot" {
-  name = "chatbot:latest"
-}
-
-# Push the Docker image to the Google Container Registry
-resource "null_resource" "push_docker_image_chatbot" {
-  depends_on = [
-    data.docker_image.chatbot,
-    null_resource.gcloud_auth
-  ]
-
-  provisioner "local-exec" {
-    command = "docker tag chatbot gcr.io/balerion-383615/chatbot:latest && docker push gcr.io/balerion-383615/chatbot:latest"
-  }
-}
-
-# Push the Docker image to the Google Container Registry
-data "google_container_registry_image" "chatbot" {
-  name = "chatbot"
-}
-
 resource "google_cloud_run_v2_service" "chatbot" {
   name     = "chatbot"
   location = "us-central1"
   ingress = "INGRESS_TRAFFIC_ALL"
   depends_on = [
-    data.google_container_registry_image.chatbot,
-    null_resource.push_docker_image_chatbot,
     resource.google_cloud_run_v2_service.server,
-    resource.google_cloud_run_v2_service.server,
+    resource.google_cloud_run_v2_service.mysql,
   ]
   template {
     containers {
-      image = "${data.google_container_registry_repository.balerion.repository_url}/chatbot"
+      image = "gcr.io/balerion-383615/github.com/carlasoffia/balerion_chabot:latest"
       ports {
         container_port = 5005
       }
@@ -312,43 +257,17 @@ resource "google_cloud_run_v2_service_iam_policy" "policyChatbot" {
 }
 
 // ----------------------------------------------------------- FRONTEND ------------------------------------------------------------
-resource "google_container_registry" "frontend" {
-  location = "EU"
-}
-
-data "docker_image" "frontend" {
-  name = "frontend:latest"
-}
-
-# Push the Docker image to the Google Container Registry
-resource "null_resource" "push_docker_image_frontend" {
-  depends_on = [
-    data.docker_image.frontend,
-    null_resource.gcloud_auth
-  ]
-
-  provisioner "local-exec" {
-    command = "docker tag frontend gcr.io/balerion-383615/frontend:latest && docker push gcr.io/balerion-383615/frontend:latest"
-  }
-}
-
-# Push the Docker image to the Google Container Registry
-data "google_container_registry_image" "frontend" {
-  name = "frontend"
-}
 
 resource "google_cloud_run_v2_service" "frontend" {
   name     = "frontend"
   location = "us-central1"
   ingress = "INGRESS_TRAFFIC_ALL"
   depends_on = [
-    data.google_container_registry_image.frontend,
-    null_resource.push_docker_image_frontend,
     resource.google_cloud_run_v2_service.chatbot
   ]
   template {
     containers {
-      image = "${data.google_container_registry_repository.balerion.repository_url}/frontend"
+      image = "gcr.io/balerion-383615/github.com/carlasoffia/balerion_frontend:latest"
       ports {
         container_port = 8080
       }
