@@ -76,7 +76,7 @@ resource "docker_container" "db" {
 provider "google" {
   credentials = file("balerion.json")
 
-  project = "balerion-383615"
+  project = "balerionchatbot"
   region  = "us-central1"
   zone    = "us-central1-c"
 }
@@ -114,7 +114,7 @@ resource "google_cloud_run_v2_service" "server" {
   ingress = "INGRESS_TRAFFIC_ALL"
   template {
     containers {
-      image = "gcr.io/balerion-383615/github.com/carlasoffia/balerion_server:latest"
+      image = "gcr.io/balerionchatbot/github.com/carlasoffia/balerion_server:latest"
       ports {
         container_port = 3000
       }
@@ -150,7 +150,7 @@ resource "null_resource" "push_docker_image_mySQL" {
   ]
 
   provisioner "local-exec" {
-    command = "docker tag mysql gcr.io/balerion-383615/mysql:latest && docker push gcr.io/balerion-383615/mysql:latest"
+    command = "docker tag mysql gcr.io/balerionchatbot/mysql:latest && docker push gcr.io/balerionchatbot/mysql:latest"
   }
 }
 
@@ -213,7 +213,7 @@ resource "google_cloud_run_v2_service" "chatbot" {
   ]
   template {
     containers {
-      image = "gcr.io/balerion-383615/github.com/carlasoffia/balerion_chabot:latest"
+      image = "gcr.io/balerionchatbot/github.com/carlasoffia/balerion_chatbot:latest"
       ports {
         container_port = 5005
       }
@@ -267,7 +267,7 @@ resource "google_cloud_run_v2_service" "frontend" {
   ]
   template {
     containers {
-      image = "gcr.io/balerion-383615/github.com/carlasoffia/balerion_frontend:latest"
+      image = "gcr.io/balerionchatbot/github.com/carlasoffia/balerion_frontend:latest"
       ports {
         container_port = 8080
       }
