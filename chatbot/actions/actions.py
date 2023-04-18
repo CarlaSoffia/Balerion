@@ -65,7 +65,28 @@ def database_add_message(user, text):
                 charset='utf8mb4',
                 cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cursor:
-        cursor.execute("""
+        try:
+            cursor.execute("""
+                SELECT id FROM users WHERE username = %s
+            """, (user,))
+        except pymysql.err.ProgrammingError as e:
+            cursor.execute("""
+                CREATE TABLE users (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    username VARCHAR(255) UNIQUE
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE messages (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    timestamp DATETIME,
+                    message VARCHAR(255),
+                    user_id INT,
+                    FOREIGN KEY (user_id) REFERENCES users(id)
+                )
+            """)
+            conn.commit()
+            cursor.execute("""
                 SELECT id FROM users WHERE username = %s
             """, (user,))
         result = cursor.fetchone()
