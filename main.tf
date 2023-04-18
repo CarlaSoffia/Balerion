@@ -91,7 +91,7 @@ resource "google_cloud_run_v2_service" "chatbot" {
       }
       env {
           name  = "DB_host"
-          value = "127.0.0.1"
+          value = "34.71.2.187"
       }
       env {
         name  = "DB_user"
@@ -112,10 +112,6 @@ resource "google_cloud_run_v2_service" "chatbot" {
       env {
         name  = "SERVER"
         value = google_cloud_run_v2_service.server.uri
-      }
-      env {
-        name  = "IS_LOCAL"
-        value = "0"
       }
       resources {
         limits = {

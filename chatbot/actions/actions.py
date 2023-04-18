@@ -12,58 +12,41 @@ from rasa_sdk.executor import CollectingDispatcher
 
 load_dotenv()
 SERVER = str(os.getenv('SERVER'))
-IS_LOCAL = int(os.getenv('IS_LOCAL'))
-
-if IS_LOCAL != 1:
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "balerion_mysql.json"
-    os.environ['INSTANCE_CONNECTION_NAME'] = "balerionchatbot:us-central1:balerion"
     
 def database_add_message(user, text): 
-    if IS_LOCAL != 1:
+    try:
         conn = pymysql.connect(
             host=str(os.getenv('DB_host')),
             port=int(os.getenv('DB_port')),
             user=str(os.getenv('DB_user')),
             password=str(os.getenv('DB_password')),
             db=str(os.getenv('DB_database')),
-            cursorclass=pymysql.cursors.DictCursor,
-            autocommit=True,
             charset='utf8mb4',
-            unix_socket='/cloudsql/{}'.format(os.environ['INSTANCE_CONNECTION_NAME']))
-    else:
-        try:
-            conn = pymysql.connect(
-                host=str(os.getenv('DB_host')),
-                port=int(os.getenv('DB_port')),
-                user=str(os.getenv('DB_user')),
-                password=str(os.getenv('DB_password')),
-                db=str(os.getenv('DB_database')),
-                charset='utf8mb4',
-                cursorclass=pymysql.cursors.DictCursor)
-        except pymysql.err.OperationalError as e:
-            database_name = str(os.getenv('DB_database'))
-            print(f"Database doesn't exist: {database_name}")
-            conn = pymysql.connect(
-                host=str(os.getenv('DB_host')),
-                port=int(os.getenv('DB_port')),
-                user=str(os.getenv('DB_user')),
-                password=str(os.getenv('DB_password')),
-                charset='utf8mb4',
-                cursorclass=pymysql.cursors.DictCursor)
-            
-            with conn.cursor() as cursor:
-                cursor.execute(f"CREATE DATABASE {database_name}")
-            
-            print(f"Database created: {database_name}")
-            conn.commit()
-            conn = pymysql.connect(
-                host=str(os.getenv('DB_host')),
-                port=int(os.getenv('DB_port')),
-                user=str(os.getenv('DB_user')),
-                password=str(os.getenv('DB_password')),
-                db=database_name,
-                charset='utf8mb4',
-                cursorclass=pymysql.cursors.DictCursor)
+            cursorclass=pymysql.cursors.DictCursor)
+    except pymysql.err.OperationalError as e:
+        database_name = str(os.getenv('DB_database'))
+        print(f"Database doesn't exist: {database_name}")
+        conn = pymysql.connect(
+            host=str(os.getenv('DB_host')),
+            port=int(os.getenv('DB_port')),
+            user=str(os.getenv('DB_user')),
+            password=str(os.getenv('DB_password')),
+            charset='utf8mb4',
+            cursorclass=pymysql.cursors.DictCursor)
+        
+        with conn.cursor() as cursor:
+            cursor.execute(f"CREATE DATABASE {database_name}")
+        
+        print(f"Database created: {database_name}")
+        conn.commit()
+        conn = pymysql.connect(
+            host=str(os.getenv('DB_host')),
+            port=int(os.getenv('DB_port')),
+            user=str(os.getenv('DB_user')),
+            password=str(os.getenv('DB_password')),
+            db=database_name,
+            charset='utf8mb4',
+            cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cursor:
         try:
             cursor.execute("""
