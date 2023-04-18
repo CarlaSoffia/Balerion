@@ -91,15 +91,15 @@ resource "google_cloud_run_v2_service" "chatbot" {
       }
       env {
           name  = "DB_host"
-          value = "34.71.2.187"
+          value = "baleriondb.cr9drxfad39n.eu-north-1.rds.amazonaws.com"
       }
       env {
         name  = "DB_user"
-        value = "root"
+        value = "admin"
       }
       env {
           name  = "DB_password"
-          value = "secret"
+          value = "secretdb"
       }
       env {
           name  = "DB_port"
