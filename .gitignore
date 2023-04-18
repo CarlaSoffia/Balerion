@@ -1,5 +1,6 @@
 chatbot/.rasa
 chatbot/actions/__pycache__
+chatbot/actions/balerion_mysql.json
 
 frontend/.DS_Store
 frontend/node_modules

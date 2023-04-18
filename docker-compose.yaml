@@ -8,9 +8,10 @@ services:
       - DB_host=db
       - DB_user=root
       - DB_password=secret
-      - DB_database=BalerionMySQL
-      - SERVER=http://server:3000  
+      - DB_database=balerionDB
+      - SERVER=http://server:3000
       - DB_port=3306
+      - IS_LOCAL=1
   frontend:
     image: frontend
     build: frontend
@@ -27,7 +28,7 @@ services:
     image: mysql
     restart: always
     environment:
-      - MYSQL_DATABASE=BalerionMySQL
+      - MYSQL_DATABASE=balerionDB
       - MYSQL_ROOT_PASSWORD=secret
     ports:
       - "3306:3306"

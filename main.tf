@@ -11,65 +11,6 @@ terraform {
   }
 }
 
-provider "docker" {}
-/*
-resource "docker_container" "chatbot" {
-  name = "chatbot"
-  image = "chatbot"
-  ports {
-    internal = 5005
-    external = 5005
-  }
-  env = [
-    "DB_host=db",
-    "DB_user=root",
-    "DB_password=secret",
-    "DB_database=BalerionMySQL",
-    "SERVER=http://server:3000",
-    "DB_port=3306",
-  ]
-}
-
-resource "docker_container" "frontend" {
-  name = "frontend"
-  image = "frontend"
-  ports {
-    internal = 8080
-    external = 8080
-  }
-  env = [
-    "VUE_APP_chatbot=http://localhost:5005/webhooks/rest/webhook",
-  ]
-}
-
-resource "docker_container" "server" {
-  name = "server"
-  image = "server"
-  ports {
-    internal = 3000
-    external = 3000
-  }
-}
-
-resource "docker_container" "db" {
-  name = "db"
-  image = "mysql"
-  restart = "always"
-  env = [
-    "MYSQL_DATABASE=BalerionMySQL",
-    "MYSQL_ROOT_PASSWORD=secret",
-  ]
-  ports {
-    internal = 3306
-    external = 3306
-  }
-  volumes {
-    container_path = "/var/lib/mysql"
-    host_path = "/database"
-    read_only = false
-  }
-}
-*/
 // ------------------------------- Google -------------------------------
 
 
@@ -132,74 +73,6 @@ resource "google_cloud_run_v2_service_iam_policy" "policyServer" {
   ]
 }
 
-// ------------------------------------------------------ DATABASE ---------------------------------------------------------------
-
-resource "google_container_registry" "mysql" {
-  location = "EU"
-}
-
-data "docker_image" "mysql" {
-  name = "mysql:latest"
-}
-
-# Push the Docker image to the Google Container Registry
-resource "null_resource" "push_docker_image_mySQL" {
-  depends_on = [
-    data.docker_image.mysql,
-    null_resource.gcloud_auth
-  ]
-
-  provisioner "local-exec" {
-    command = "docker tag mysql gcr.io/balerionchatbot/mysql:latest && docker push gcr.io/balerionchatbot/mysql:latest"
-  }
-}
-
-# Push the Docker image to the Google Container Registry
-data "google_container_registry_image" "mysql" {
-  name = "mysql"
-}
-
-resource "google_cloud_run_v2_service" "mysql" {
-  name     = "mysql"
-  location = "us-central1"
-  ingress = "INGRESS_TRAFFIC_ALL"
-  depends_on = [
-    data.google_container_registry_image.mysql,
-    null_resource.push_docker_image_mySQL
-  ]
-  template {
-    containers {
-      image = "${data.google_container_registry_repository.balerion.repository_url}/mysql"
-      ports {
-        container_port = 3306
-      }
-      env {
-          name  = "MYSQL_DATABASE"
-          value = "BalerionMySQL"
-      }
-      env {
-        name  = "MYSQL_ROOT_PASSWORD"
-        value = "secret"
-      }
-      resources {
-        limits = {
-          memory = "1Gi"
-        }
-      }  
-    }
-  }
-}
-
-resource "google_cloud_run_v2_service_iam_policy" "policyMySQL" {
-  project = google_cloud_run_v2_service.mysql.project
-  location = google_cloud_run_v2_service.mysql.location
-  name = google_cloud_run_v2_service.mysql.name
-  policy_data = data.google_iam_policy.public.policy_data
-  depends_on = [
-    resource.google_cloud_run_v2_service.mysql
-  ]
-}
-
 // ------------------------------------------------------ RASA CHATBOT ---------------------------------------------------------------
 
 
@@ -208,8 +81,7 @@ resource "google_cloud_run_v2_service" "chatbot" {
   location = "us-central1"
   ingress = "INGRESS_TRAFFIC_ALL"
   depends_on = [
-    resource.google_cloud_run_v2_service.server,
-    resource.google_cloud_run_v2_service.mysql,
+    resource.google_cloud_run_v2_service.server
   ]
   template {
     containers {
@@ -219,7 +91,7 @@ resource "google_cloud_run_v2_service" "chatbot" {
       }
       env {
           name  = "DB_host"
-          value = google_cloud_run_v2_service.mysql.uri
+          value = "127.0.0.1"
       }
       env {
         name  = "DB_user"
@@ -235,11 +107,15 @@ resource "google_cloud_run_v2_service" "chatbot" {
       }
       env {
         name  = "DB_database"
-        value = "BalerionMySQL"
+        value = "balerionDB"
       }
       env {
         name  = "SERVER"
         value = google_cloud_run_v2_service.server.uri
+      }
+      env {
+        name  = "IS_LOCAL"
+        value = "0"
       }
       resources {
         limits = {
