@@ -1,17 +1,11 @@
 terraform {
   required_providers {
-    docker = {
-      source = "kreuzwerker/docker"
-      version = "~> 3.0.1"
-    }
     google = {
       source = "hashicorp/google"
       version = "4.61.0"
     }
   }
 }
-
-// ------------------------------- Google -------------------------------
 
 
 provider "google" {
@@ -20,22 +14,6 @@ provider "google" {
   project = "balerionchatbot"
   region  = "us-central1"
   zone    = "us-central1-c"
-}
-
-resource "google_compute_network" "vpc_network" {
-  name = "terraform-network"
-  lifecycle {
-    prevent_destroy = false
-  }
-}
-
-data "google_container_registry_repository" "balerion" {
-}
-
-resource "null_resource" "gcloud_auth" {
-  provisioner "local-exec" {
-    command = "gcloud auth configure-docker"
-  }
 }
 
 data "google_iam_policy" "public" {
