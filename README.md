@@ -27,11 +27,26 @@ A chatbot to provide informations about Characters and Houses from the ASOIAF un
 
 ## Local scenario
 
-Provide step-by-step instructions on how to install and set up the project locally.
+Getting started:
+1. Clone the repository and open the project in a terminal
+2. To build the images run: `docker-compose build`
+3. To create and start the containers based on the images: `docker-compose up -d`
+
+Cleaning up:
+1. Clone the repository and open the project in a terminal
+2. Stops and remove containers: `docker-compose down --rmi all`
 
 ## Cloud scenario
 
-Provide step-by-step instructions on how to install and set up the project locally.
+Raise the infrastructure:
+1. Clone the repository and open the project in a terminal
+2. Generate execution plan for the infrastructure: `terraform plan` and say 'yes'
+3. Create or update the infrastructure: `terraform apply` and say 'yes'
+
+Tear down the infrastructure:
+1. Clone the repository and open the project in a terminal
+2. Generate execution plan for the infrastructure: `terraform plan` and say 'yes'
+3. Create or update the infrastructure: `terraform destroy` and say 'yes'
 
 ## Usage
 
