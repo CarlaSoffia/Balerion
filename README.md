@@ -1,6 +1,6 @@
 # Balerion - ASOIAF Chatbot 🐲
 
-The world of “A Song of Ice and Fire” created by George R. R. Martin has captured the imagination of millions of readers and viewers around the world through its complex characters and ancient houses, intricate plotlines, and epic battles. With so many characters and houses to keep track of, fans often struggle to remember details about their favourite characters or to make connections between them. The chatbot Balerion was developed to provide quick and easy access to information about both characters and houses from the ASOIAF universe, therefore helping fans to better understand and appreciate this rich fictional world without being subjected to spoilers or too much information.
+A chatbot to provide informations about Characters and Houses from the ASOIAF universe
 
 ## Table of Contents
 
@@ -32,7 +32,6 @@ Provide step-by-step instructions on how to install and set up the project local
 ## Cloud scenario
 
 Provide step-by-step instructions on how to install and set up the project locally.
-
 
 ## Usage
 
