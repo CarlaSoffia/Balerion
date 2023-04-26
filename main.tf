@@ -93,7 +93,7 @@ resource "google_cloud_run_v2_service" "chatbot" {
       }
       resources {
         limits = {
-          memory = "1050Mi"
+          memory = "2048Mi"
         }
       } 
     }
