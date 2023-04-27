@@ -25,6 +25,7 @@ A chatbot to provide informations about Characters and Houses from the ASOIAF un
 - MySQL
 - Rasa
 
+The following diagram details the existing services and the communication between them.
 <img src="diagrams\Components.png" alt="Chatbot components" width="100%"/>
 
 ## Local scenario
