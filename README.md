@@ -25,7 +25,11 @@ A chatbot to provide informations about Characters and Houses from the ASOIAF un
 - MySQL
 - Rasa
 
+<img src="diagrams\Components.png" alt="Chatbot components" width="400"/>
+
 ## Local scenario
+
+<img src="diagrams\Local.png" alt="Chatbot local scenario" width="400"/>
 
 Getting started:
 1. Clone the repository and open the project in a terminal
@@ -37,6 +41,8 @@ Cleaning up:
 2. Stops and remove containers: `docker-compose down --rmi all`
 
 ## Cloud scenario
+
+<img src="diagrams\Cloud.png" alt="Chatbot cloud scenario" width="400"/>
 
 Raise the infrastructure:
 1. Clone the repository and open the project in a terminal
