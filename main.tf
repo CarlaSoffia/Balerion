@@ -34,9 +34,6 @@ resource "google_cloud_run_v2_service" "server" {
   template {
     containers {
       image = "gcr.io/balerionchatbot/github.com/carlasoffia/balerion_server:latest"
-      ports {
-        container_port = 3000
-      }
     }    
   }
 }
@@ -64,9 +61,6 @@ resource "google_cloud_run_v2_service" "chatbot" {
   template {
     containers {
       image = "gcr.io/balerionchatbot/github.com/carlasoffia/balerion_chatbot:latest"
-      ports {
-        container_port = 5005
-      }
       env {
           name  = "DB_host"
           value = "baleriondb.cr9drxfad39n.eu-north-1.rds.amazonaws.com"
@@ -122,9 +116,6 @@ resource "google_cloud_run_v2_service" "frontend" {
   template {
     containers {
       image = "gcr.io/balerionchatbot/github.com/carlasoffia/balerion_frontend:latest"
-      ports {
-        container_port = 8080
-      }
       env {
         name  = "VUE_APP_RASA"
         value = "${google_cloud_run_v2_service.chatbot.uri}/webhooks/rest/webhook"

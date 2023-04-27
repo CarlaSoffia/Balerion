@@ -11,6 +11,7 @@ services:
       - DB_database=balerionDB
       - SERVER=http://server:3000
       - DB_port=3306
+      - PORT=5005
   frontend:
     image: frontend
     build: frontend
@@ -22,7 +23,9 @@ services:
     image: server
     build: server
     ports:
-      - "3000:3000"   
+      - "3000:3000"  
+    environment: 
+      - PORT=3000  
   db:
     image: mysql
     restart: always
