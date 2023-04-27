@@ -25,11 +25,11 @@ A chatbot to provide informations about Characters and Houses from the ASOIAF un
 - MySQL
 - Rasa
 
-<img src="diagrams\Components.png" alt="Chatbot components" width="400"/>
+<img src="diagrams\Components.png" alt="Chatbot components" width="100%"/>
 
 ## Local scenario
 
-<img src="diagrams\Local.png" alt="Chatbot local scenario" width="400"/>
+<img src="diagrams\Local.png" alt="Chatbot local scenario" width="100%"/>
 
 Getting started:
 1. Clone the repository and open the project in a terminal
@@ -42,7 +42,7 @@ Cleaning up:
 
 ## Cloud scenario
 
-<img src="diagrams\Cloud.png" alt="Chatbot cloud scenario" width="400"/>
+<img src="diagrams\Cloud.png" alt="Chatbot cloud scenario" width="100%"/>
 
 Raise the infrastructure:
 1. Clone the repository and open the project in a terminal
