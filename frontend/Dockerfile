@@ -5,16 +5,13 @@ FROM node:14.17.0-alpine3.13
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the container
-COPY package*.json ./
+COPY package.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code to the container
 COPY . .
-
-# Build the production-ready application
-RUN npm run build
 
 # Start the server
 ENTRYPOINT ["npm", "run", "serve"]
